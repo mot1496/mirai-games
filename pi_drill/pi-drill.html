@@ -167,7 +167,6 @@
     <button class="again" id="retryBtn">もう一回</button>
   </div>
 
-  <button class="dl-btn" id="downloadBtn" disabled="">⬇ このゲームをダウンロード</button>
 </div>
 
 <script>
@@ -293,32 +292,6 @@ function showResult(){
 document.getElementById('retryBtn').addEventListener('click', startGame);
 startGame();
 
-(async ()=>{
-  const btn = document.getElementById('downloadBtn');
-  if(!window.claude || typeof window.claude.use !== 'function') return;
-  const downloads = await window.claude.use('downloads');
-  if(!downloads) return;
-  btn.classList.remove('hidden');
-  btn.addEventListener('click', async ()=>{
-    btn.disabled = true;
-    const original = btn.textContent;
-    try{
-      const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-      const result = await downloads.save({ filename: 'pi-drill-game.html', data: html });
-      if(result.status === 'saved'){
-        btn.textContent = '保存しました';
-        setTimeout(()=>{ btn.textContent = original; btn.disabled = false; }, 1500);
-      }
-    }catch(err){
-      if(err && err.code === 'declined'){
-        btn.disabled = false;
-      }else{
-        btn.textContent = '保存できませんでした';
-        setTimeout(()=>{ btn.textContent = original; btn.disabled = false; }, 1500);
-      }
-    }
-  });
-})();
 </script>
 
 
